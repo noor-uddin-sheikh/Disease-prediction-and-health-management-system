@@ -1,0 +1,1240 @@
+/* Global Styles */
+:root {
+    --primary-color: #4a6fff;
+    --secondary-color: #a155fd;
+    --tertiary-color: #fe8e68;
+    --dark-color: #333;
+    --light-color: #f5f7ff;
+    --light-gray: #f1f3f9;
+    --medium-gray: #dae0ed;
+    --dark-gray: #8495b2;
+    --danger-color: #ff5a5a;
+    --success-color: #2fd186;
+    --warning-color: #ffb547;
+    --info-color: #56c0e0;
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --border-radius: 12px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease-in-out;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+}
+
+/* Buttons & Inputs */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    background-color: var(--medium-gray);
+    color: var(--dark-color);
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 5px 15px rgba(74, 111, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--light-gray);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #ff4242;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--medium-gray);
+    background-color: white;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 111, 255, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: var(--dark-gray);
+}
+
+.input-group input {
+    padding-left: 45px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+/* Toggle Switch */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--medium-gray);
+    border-radius: 34px;
+    transition: var(--transition);
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.toggle input:checked+.toggle-slider {
+    background-color: var(--primary-color);
+}
+
+.toggle input:checked+.toggle-slider:before {
+    transform: translateX(24px);
+}
+
+.toggle-setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Login & Register */
+#loginContainer,
+#registerContainer {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+}
+
+.login-card {
+    width: 400px;
+    padding: 40px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+}
+
+.login-card .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.login-card .logo i {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+.login-card h1 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+}
+
+.login-card h2 {
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.login-card p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-card a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-card .btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Dashboard Layout */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: var(--shadow-sm);
+    z-index: 100;
+    transition: var(--transition);
+}
+
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.sidebar .logo i {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
+.sidebar .logo h1 {
+    font-size: 1.4rem;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 20px 0;
+}
+
+.nav-links li {
+    padding: 10px 20px;
+    margin: 5px 0;
+}
+
+.nav-links li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--dark-color);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.nav-links li a i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.nav-links li.active {
+    background-color: var(--light-gray);
+    border-left: 4px solid var(--primary-color);
+}
+
+.nav-links li.active a {
+    color: var(--primary-color);
+}
+
+.nav-links li:hover:not(.active) {
+    background-color: var(--light-gray);
+}
+
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+.welcome h2 {
+    font-size: 1.7rem;
+    margin-bottom: 5px;
+}
+
+.welcome p {
+    color: var(--dark-gray);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info span {
+    margin-right: 15px;
+    color: var(--dark-gray);
+}
+
+.user-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+/* Dashboard Cards */
+.overview-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: var(--light-gray);
+    margin-bottom: 15px;
+}
+
+.card-icon i {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.card .card-info p {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.column {
+    flex: 1;
+}
+
+.full-card {
+    height: 100%;
+}
+
+.chart-container {
+    width: 100%;
+    height: 250px;
+    margin-top: 15px;
+}
+
+.check-ups-list {
+    margin-top: 15px;
+}
+
+/* Health Records Section */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+}
+
+.filter-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    position: relative;
+    width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dark-gray);
+}
+
+.search-box input {
+    padding-left: 40px;
+}
+
+.records-table-container {
+    overflow-x: auto;
+}
+
+.records-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.records-table th {
+    background-color: var(--light-gray);
+    padding: 15px;
+    font-weight: 600;
+}
+
+.records-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.records-table tr:hover {
+    background-color: var(--light-gray);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Prediction Section */
+.prediction-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.prediction-container .column {
+    flex: 1;
+}
+
+.symptoms-selector {
+    margin-bottom: 20px;
+}
+
+.search-symptoms {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.symptom-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: var(--shadow-sm);
+}
+
+.symptom-suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.symptom-suggestion-item:hover {
+    background-color: var(--light-gray);
+}
+
+.selected-symptoms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 100px;
+    padding: 10px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+}
+
+.symptom-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.symptom-tag .remove {
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.model-options {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--medium-gray);
+}
+
+.model-options h4 {
+    margin-bottom: 15px;
+}
+
+.model-options .form-group {
+    margin-bottom: 15px;
+}
+
+/* Prediction Results */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
+    color: var(--dark-gray);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.loader {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid var(--primary-color);
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.prediction-summary {
+    padding: 20px;
+    background: var(--light-gray);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.predicted-disease {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 10px 0 15px;
+}
+
+.confidence-meter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.confidence-bar {
+    flex: 1;
+    height: 10px;
+    background-color: var(--medium-gray);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.confidence-level {
+    height: 100%;
+    background: var(--gradient-primary);
+}
+
+.prediction-details,
+.prediction-alternatives {
+    margin-top: 20px;
+}
+
+.prediction-details h4,
+.prediction-alternatives h4 {
+    margin-bottom: 10px;
+}
+
+.prediction-details p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+#diseasePrecautions {
+    margin-top: 15px;
+}
+
+#diseasePrecautions ul {
+    list-style: none;
+}
+
+#diseasePrecautions li {
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+
+#diseasePrecautions li:before {
+    content: "•";
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.insights-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.insight-section {
+    flex: 1;
+}
+
+.metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.metric {
+    background-color: var(--light-gray);
+    padding: 15px;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+}
+
+.metric-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--dark-gray);
+    margin-bottom: 5px;
+}
+
+.metric-value {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Profile Section */
+.profile-container {
+    display: flex;
+    gap: 20px;
+}
+
+.profile-card {
+    flex: 2;
+    background-color: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.profile-header {
+    padding: 30px;
+    display: flex;
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.profile-avatar {
+    position: relative;
+    margin-right: 20px;
+}
+
+.profile-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    object-fit: cover;
+}
+
+.avatar-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.profile-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.profile-body {
+    padding: 30px;
+}
+
+.profile-settings {
+    flex: 1;
+}
+
+.settings-group {
+    margin-bottom: 30px;
+}
+
+.settings-group h4 {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.danger-zone {
+    margin-top: 40px;
+}
+
+.danger-zone .btn {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Avatar placeholder styles */
+.avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4A6FFF;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-placeholder-small {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+}
+
+.avatar-placeholder-large {
+    width: 150px;
+    height: 150px;
+    font-size: 60px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .sidebar .logo h1,
+    .nav-links li a span {
+        display: none;
+    }
+
+    .sidebar .nav-links li a i {
+        margin-right: 0;
+    }
+
+    .content {
+        margin-left: 60px;
+    }
+
+    .profile-container,
+    .prediction-container,
+    .row {
+        flex-direction: column;
+    }
+
+    .insights-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .overview-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .login-card {
+        width: 90%;
+    }
+}
+
+/* Symptom Checkbox Grid */
+.symptoms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.symptom-checkbox {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.symptom-checkbox:hover {
+    background-color: #e9ecef;
+}
+
+.symptom-checkbox input {
+    margin-right: 8px;
+}
+
+.symptom-checkbox label {
+    cursor: pointer;
+    text-transform: capitalize;
+    font-size: 0.9rem;
+}
+
+.symptom-counter {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Severity Indicators */
+.severity-indicator {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.severity-mild {
+    background-color: var(--success-color);
+}
+
+.severity-moderate {
+    background-color: var(--warning-color);
+}
+
+.severity-severe {
+    background-color: var(--danger-color);
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Symptoms Scrollable Container */
+.symptoms-scroll-container {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.symptoms-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.symptoms-scroll-container::-webkit-scrollbar-track {
+    background: var(--light-gray);
+    border-radius: 4px;
+}
+
+.symptoms-scroll-container::-webkit-scrollbar-thumb {
+    background: var(--medium-gray);
+    border-radius: 4px;
+}
+
+.symptoms-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-gray);
+}
+
+.symptoms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+/* Improve styling for symptom search and selection */
+.symptom-search-box {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.symptom-search-box input {
+    padding-left: 35px;
+}
+
+.symptom-search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dark-gray);
+}
+
+/* Symptom Categories and Accordion */
+.symptom-category {
+    margin-bottom: 15px;
+    background-color: white;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.symptom-category-header {
+    background-color: var(--light-gray);
+    padding: 10px 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--primary-color);
+}
+
+.symptom-category-header:hover {
+    background-color: #e9ecef;
+}
+
+.symptom-category-header i {
+    transition: transform 0.3s ease;
+}
+
+.symptoms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    padding: 15px;
+}
+
+.symptoms-grid.collapsed {
+    display: none;
+}
+
+.symptoms-scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+.symptom-checkbox {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: white;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.symptom-checkbox:hover {
+    background-color: #f0f0f0;
+}
+
+/* Search box for symptoms */
+.symptom-search-box {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.symptom-search-box input {
+    padding-left: 35px;
+    border-radius: 20px;
+    border: 1px solid var(--medium-gray);
+    width: 100%;
+    height: 40px;
+}
+
+.symptom-search-box input:focus {
+    box-shadow: 0 0 0 3px rgba(74, 111, 255, 0.2);
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.symptom-search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dark-gray);
+}
+
+/* Match Details Display */
+.match-details {
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+.match-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.match-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--dark-gray);
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* Alternative Diseases Confidence Bars */
+.alt-confidence {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+    width: 100%;
+}
+
+#alternativeDiseases li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.alt-confidence-bar {
+    flex-grow: 1;
+    height: 8px;
+    background-color: var(--light-gray);
+    border-radius: 4px;
+    margin: 0 10px;
+    overflow: hidden;
+}
+
+.alt-confidence-level {
+    height: 100%;
+    border-radius: 4px;
+}
+
+.alt-confidence-percent {
+    min-width: 40px;
+    text-align: right;
+    font-size: 0.9rem;
+    color: var(--dark-gray);
+}
+
+/* Emergency login options */
+.emergency-login-options {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.emergency-login-options .small-text {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.emergency-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn-small {
+    padding: 6px 10px;
+    font-size: 12px;
+    background-color: #f0f0f0;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+.btn-small:hover {
+    background-color: #e0e0e0;
+}

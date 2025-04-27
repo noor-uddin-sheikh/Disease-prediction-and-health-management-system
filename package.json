@@ -1,0 +1,29 @@
+{
+  "name": "healthtrack-disease-prediction",
+  "version": "1.0.0",
+  "description": "Health Management System with Disease Prediction",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "build": "npm run build --prefix client",
+    "dev-full": "concurrently \"npm run dev\" \"npm run client\"",
+    "create-test-user": "node create-test-user.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.23"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.0",
+    "nodemon": "^2.0.12"
+  }
+}

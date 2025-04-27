@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTrack - Disease Prediction System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="container" id="mainContainer">
+        <div id="loginContainer" class="hidden">
+            <div class="login-card">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <h1>HealthTrack</h1>
+                </div>
+                <h2>Sign In</h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+
+                <!-- Emergency login options (for development only) -->
+                <div class="emergency-login-options">
+                    <p class="small-text">Development Options:</p>
+                    <div class="emergency-buttons">
+                        <button id="createTestUserBtn" class="btn btn-small">Create Test User</button>
+                        <button id="emergencyLoginBtn" class="btn btn-small">Emergency Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="registerContainer" class="hidden">
+            <div class="login-card">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <h1>HealthTrack</h1>
+                </div>
+                <h2>Create Account</h2>
+                <form id="registerForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="newUsername" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="newPassword" placeholder="Password" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+            </div>
+        </div>
+
+        <div id="dashboardContainer">
+            <nav class="sidebar">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <h1>HealthTrack</h1>
+                </div>
+                <ul class="nav-links">
+                    <li class="active"><a href="#" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li><a href="#" data-section="health-records"><i class="fas fa-notes-medical"></i> Health
+                            Records</a></li>
+                    <li><a href="#" data-section="predict-disease"><i class="fas fa-stethoscope"></i> Predict
+                            Disease</a></li>
+                    <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
+                </ul>
+            </nav>
+
+            <main class="content">
+                <header>
+                    <div class="welcome">
+                        <h2>Welcome, <span id="userDisplayName">User</span></h2>
+                        <p>Track your health and predict potential diseases</p>
+                    </div>
+                    <div class="user-info">
+                        <span id="currentDate"></span>
+                        <div class="user-avatar">
+                            <img src="https://via.placeholder.com/40" alt="User Avatar">
+                        </div>
+                    </div>
+                </header>
+
+                <section id="dashboard-section" class="content-section">
+                    <div class="overview-cards">
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-heartbeat"></i></div>
+                            <div class="card-info">
+                                <h3>Heart Rate</h3>
+                                <p><span id="heartRate">75</span> BPM</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-weight"></i></div>
+                            <div class="card-info">
+                                <h3>Weight</h3>
+                                <p><span id="weight">68</span> kg</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-temperature-high"></i></div>
+                            <div class="card-info">
+                                <h3>Temperature</h3>
+                                <p><span id="temperature">98.6</span> °F</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-tint"></i></div>
+                            <div class="card-info">
+                                <h3>Blood Pressure</h3>
+                                <p><span id="bloodPressure">120/80</span> mmHg</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <div class="card full-card">
+                                <h3>Health Overview</h3>
+                                <div class="chart-container">
+                                    <canvas id="healthChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="card full-card">
+                                <h3>Recent Check-ups</h3>
+                                <div class="check-ups-list" id="recentCheckups">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="health-records-section" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>Health Records</h2>
+                        <button id="addRecordBtn" class="btn"><i class="fas fa-plus"></i> Add New Record</button>
+                    </div>
+
+                    <div class="filter-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchRecords" placeholder="Search records...">
+                        </div>
+                        <select id="recordTypeFilter">
+                            <option value="all">All Records</option>
+                            <option value="routine">Routine Check</option>
+                            <option value="monthly">Monthly Check</option>
+                        </select>
+                    </div>
+
+                    <div class="records-table-container">
+                        <table class="records-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Blood Pressure</th>
+                                    <th>Heart Rate</th>
+                                    <th>Temperature</th>
+                                    <th>Weight</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="healthRecordsTable">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="recordFormModal" class="modal hidden">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2 id="recordFormTitle">Add Health Record</h2>
+                            <form id="healthRecordForm">
+                                <input type="hidden" id="recordId">
+                                <div class="form-group">
+                                    <label for="recordDate">Date</label>
+                                    <input type="date" id="recordDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recordType">Record Type</label>
+                                    <select id="recordType" required>
+                                        <option value="routine">Routine Check</option>
+                                        <option value="monthly">Monthly Check (January, February, etc.)</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="bloodPressureInput">Blood Pressure (mmHg)</label>
+                                        <input type="text" id="bloodPressureInput" placeholder="120/80" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="heartRateInput">Heart Rate (BPM)</label>
+                                        <input type="number" id="heartRateInput" placeholder="75" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="temperatureInput">Temperature (°F)</label>
+                                        <input type="number" step="0.1" id="temperatureInput" placeholder="98.6"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="weightInput">Weight (kg)</label>
+                                        <input type="number" step="0.1" id="weightInput" placeholder="70" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="symptomsInput">Symptoms (if any)</label>
+                                    <textarea id="symptomsInput"
+                                        placeholder="Enter any symptoms you are experiencing"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="notesInput">Additional Notes</label>
+                                    <textarea id="notesInput" placeholder="Any additional notes"></textarea>
+                                </div>
+                                <div class="form-buttons">
+                                    <button type="button" id="cancelRecord" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save Record</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="disease-prediction" class="section-container hidden">
+                    <div class="section-header">
+                        <h2>Disease Prediction</h2>
+                        <p>Identify possible health conditions based on symptoms</p>
+                    </div>
+
+                    <div class="content-container">
+                        <div class="card-container">
+                            <!-- Left Column: Symptom Selection -->
+                            <div class="column">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Symptoms</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="symptomForm">
+                                            <!-- Symptom selection -->
+                                            <div id="symptomsCheckboxContainer" class="form-group">
+                                                <!-- Checkboxes will be added here by JavaScript -->
+                                            </div>
+
+                                            <!-- Health records integration -->
+                                            <div class="form-group">
+                                                <div class="checkbox-wrapper">
+                                                    <input type="checkbox" id="useHealthRecords" checked>
+                                                    <label for="useHealthRecords">Consider health records in
+                                                        analysis</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Submit button -->
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary btn-block">
+                                                    <i class="fas fa-search-plus"></i> Analyze Symptoms
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Prediction Results -->
+                            <div class="column">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Prediction</h3>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <!-- Loading state -->
+                                        <div id="loadingPrediction" class="prediction-section hidden">
+                                            <div class="loader"></div>
+                                            <p>Analyzing symptoms...</p>
+                                        </div>
+
+                                        <!-- No prediction state -->
+                                        <div id="noPrediction" class="prediction-section">
+                                            <div class="empty-state">
+                                                <i class="fas fa-diagnoses"></i>
+                                                <p>Select symptoms and click "Analyze Symptoms" to get a prediction</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Prediction output -->
+                                        <div id="predictionOutput" class="prediction-section hidden">
+                                            <div class="result-header">
+                                                <h4>Predicted Disease:</h4>
+                                                <h3 id="predictedDisease">Unknown</h3>
+                                            </div>
+
+                                            <!-- Confidence level -->
+                                            <div class="confidence-meter">
+                                                <label>Confidence Level:</label>
+                                                <div class="confidence-bar">
+                                                    <div id="confidenceLevel" class="confidence-level"
+                                                        style="width: 0;"></div>
+                                                </div>
+                                                <span id="confidencePercent">0%</span>
+                                            </div>
+
+                                            <!-- Severity level -->
+                                            <div class="result-section">
+                                                <h5>Severity Assessment</h5>
+                                                <div id="diseaseSeverity">
+                                                    <!-- Severity info will be added here by JavaScript -->
+                                                </div>
+                                            </div>
+
+                                            <!-- Description -->
+                                            <div class="result-section">
+                                                <h5>Description</h5>
+                                                <p id="diseaseDescription">No description available</p>
+                                            </div>
+
+                                            <!-- Precautions -->
+                                            <div class="result-section">
+                                                <h5>Precautions</h5>
+                                                <div id="diseasePrecautions">
+                                                    <p>No precautions available</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Diet recommendations -->
+                                            <div class="result-section">
+                                                <h5>Diet Recommendations</h5>
+                                                <div id="diseaseDiet">
+                                                    <p>No recommendations available</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Alternative diagnoses -->
+                                            <div class="result-section">
+                                                <h5>Other Possibilities</h5>
+                                                <ul id="alternativeDiseases">
+                                                    <li>No alternative diagnoses</li>
+                                                </ul>
+                                            </div>
+
+                                            <!-- Save to records -->
+                                            <div class="form-group">
+                                                <button id="saveResultBtn" class="btn btn-secondary">
+                                                    <i class="fas fa-save"></i> Save to Health Records
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="profile-section" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>User Profile</h2>
+                    </div>
+
+                    <div class="profile-container">
+                        <div class="profile-card">
+                            <div class="profile-header">
+                                <div class="profile-avatar">
+                                    <img src="https://via.placeholder.com/150" alt="User Avatar">
+                                    <div class="avatar-edit">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                </div>
+                                <div class="profile-info">
+                                    <h3 id="profileName">John Doe</h3>
+                                    <p id="profileEmail">john.doe@example.com</p>
+                                </div>
+                            </div>
+
+                            <div class="profile-body">
+                                <form id="profileForm">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="profileUsername">Username</label>
+                                            <input type="text" id="profileUsername" value="johndoe" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="profileFullName">Full Name</label>
+                                            <input type="text" id="profileFullName" value="John Doe">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="profileAge">Age</label>
+                                            <input type="number" id="profileAge" value="35">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="profileGender">Gender</label>
+                                            <select id="profileGender">
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="profileHeight">Height (cm)</label>
+                                            <input type="number" id="profileHeight" value="175">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="profileWeight">Weight (kg)</label>
+                                            <input type="number" id="profileWeight" value="70">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileMedicalHistory">Medical History</label>
+                                        <textarea id="profileMedicalHistory"
+                                            placeholder="Enter any relevant medical history"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileAllergies">Allergies</label>
+                                        <textarea id="profileAllergies" placeholder="Enter any allergies"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="profile-settings">
+                            <div class="card">
+                                <h3>Account Settings</h3>
+                                <div class="settings-group">
+                                    <h4>Change Password</h4>
+                                    <form id="changePasswordForm">
+                                        <div class="form-group">
+                                            <label for="currentPassword">Current Password</label>
+                                            <input type="password" id="currentPassword" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="newPasswordInput">New Password</label>
+                                            <input type="password" id="newPasswordInput" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="confirmNewPassword">Confirm New Password</label>
+                                            <input type="password" id="confirmNewPassword" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-secondary">Update Password</button>
+                                    </form>
+                                </div>
+                                <div class="settings-group">
+                                    <h4>Notification Preferences</h4>
+                                    <div class="toggle-setting">
+                                        <label for="emailNotifications">Email Notifications</label>
+                                        <label class="toggle">
+                                            <input type="checkbox" id="emailNotifications" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="toggle-setting">
+                                        <label for="healthReminders">Health Check Reminders</label>
+                                        <label class="toggle">
+                                            <input type="checkbox" id="healthReminders" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="settings-group danger-zone">
+                                    <h4>Danger Zone</h4>
+                                    <button id="exportDataBtn" class="btn btn-secondary"><i class="fas fa-download"></i>
+                                        Export My Data</button>
+                                    <button id="deleteAccountBtn" class="btn btn-danger"><i class="fas fa-trash"></i>
+                                        Delete Account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ml-random-forest@2.0.0/dist/ml-random-forest.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/data-service.js"></script>
+    <script src="js/health-records.js"></script>
+    <script src="js/disease-prediction.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
