@@ -194,10 +194,10 @@ class HealthRecords {
     renderRecords() {
         if (!this.recordsTable) return;
 
-        // Clear table
+        // Clear the table
         this.recordsTable.innerHTML = '';
 
-        // Add table headers in the correct order
+        // Add table headers
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
             <th>Date</th>
@@ -211,13 +211,16 @@ class HealthRecords {
         `;
         this.recordsTable.appendChild(headerRow);
 
+        // Limit the number of records displayed to 10-20
+        const limitedRecords = this.records.slice(0, 20);
+
         // Render each record
-        this.records.forEach(record => {
+        limitedRecords.forEach(record => {
             this.recordsTable.appendChild(this.createRecordRow(record));
         });
 
-        // Show message if no records
-        if (this.records.length === 0) {
+        // Show a message if no records are available
+        if (limitedRecords.length === 0) {
             const emptyRow = document.createElement('tr');
             emptyRow.innerHTML = `
                 <td colspan="8" class="empty-state">
@@ -548,6 +551,9 @@ class HealthRecords {
                 message = 'Record added successfully';
             }
 
+            // Keep only the latest 10 records
+            this.records = this.records.slice(0, 10);
+
             // Save to localStorage
             this.saveDataToLocalStorage();
 
@@ -569,22 +575,20 @@ class HealthRecords {
     // Delete record
     async deleteRecord(recordId) {
         try {
-            // Remove from records array
+            // Remove the record from the records array
             this.records = this.records.filter(record => record.id !== recordId);
 
-            // Save to storage
-            await this.saveRecordsToStorage();
+            // Save the updated records to localStorage
+            this.saveDataToLocalStorage();
 
-            // Update dashboard if it exists
-            if (window.dashboard) {
-                window.dashboard.initializeDashboard();
-            }
+            // Re-render the records table
+            this.renderRecords();
 
             // Show success message
             this.showToast('Record deleted successfully', 'success');
         } catch (error) {
             console.error('Error deleting record:', error);
-            this.showToast('Error deleting record', 'error');
+            this.showToast('Error deleting record. Please try again.', 'error');
         }
     }
 
@@ -1019,6 +1023,61 @@ class HealthRecords {
 
         const average = values.reduce((sum, val) => sum + val, 0) / values.length;
         return metric === 'temperature' ? average.toFixed(1) : Math.round(average);
+    }
+
+    generateHealthInsights() {
+        const insights = [];
+        const metrics = this.calculateHealthMetrics();
+
+        // Heart Rate Insights
+        if (metrics.avgHeartRate > 100) {
+            insights.push({
+                type: 'warning',
+                title: 'Elevated Heart Rate',
+                description: `Your average heart rate of ${metrics.avgHeartRate.toFixed(0)} BPM is above the normal range.`,
+                recommendation: 'Consider consulting a healthcare provider and practicing stress-reduction techniques.'
+            });
+        } else if (metrics.avgHeartRate < 60) {
+            insights.push({
+                type: 'warning',
+                title: 'Low Heart Rate',
+                description: `Your average heart rate of ${metrics.avgHeartRate.toFixed(0)} BPM is below the normal range.`,
+                recommendation: 'Ensure you are eating well and consult a healthcare provider if symptoms persist.'
+            });
+        } else {
+            insights.push({
+                type: 'success',
+                title: 'Healthy Heart Rate',
+                description: `Your average heart rate of ${metrics.avgHeartRate.toFixed(0)} BPM is within the normal range.`,
+                recommendation: 'Maintain regular exercise and a healthy lifestyle.'
+            });
+        }
+
+        // Weight Insights
+        if (metrics.weightTrend.change > 2) {
+            insights.push({
+                type: 'warning',
+                title: 'Significant Weight Gain',
+                description: `Your weight has increased by ${metrics.weightTrend.change.toFixed(1)} kg over the last ${metrics.weightTrend.days} days.`,
+                recommendation: 'Consider reviewing your diet and exercise routine.'
+            });
+        } else if (metrics.weightTrend.change < -2) {
+            insights.push({
+                type: 'warning',
+                title: 'Significant Weight Loss',
+                description: `Your weight has decreased by ${Math.abs(metrics.weightTrend.change).toFixed(1)} kg over the last ${metrics.weightTrend.days} days.`,
+                recommendation: "Ensure you're maintaining a balanced diet and consult a healthcare provider if unintended."
+            });
+        } else {
+            insights.push({
+                type: 'success',
+                title: 'Stable Weight',
+                description: 'Your weight has remained stable over the recorded period.',
+                recommendation: 'Continue maintaining a healthy lifestyle.'
+            });
+        }
+
+        return insights;
     }
 }
 

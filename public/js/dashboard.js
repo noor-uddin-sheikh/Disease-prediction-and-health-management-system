@@ -1,8 +1,8 @@
-// Dashboard Module
+// Dashboard Module - Using sample data instead of MongoDB backend
 class Dashboard {
     constructor() {
         this.userDisplayName = document.getElementById('userDisplayName');
-
+        this.currentRecord = null;
         this.healthRecords = new HealthRecords();
         this.dataService = new DataService();
         this.healthRecords.loadRecordsFromStorage();
@@ -22,7 +22,7 @@ class Dashboard {
                 weightTrend: 'stable'
             }
         };
-
+        this.dataService = new DataService();
         // DOM elements
         this.userDisplayName = document.getElementById('userDisplayName');
         this.currentDateElem = document.getElementById('currentDate');
@@ -33,7 +33,6 @@ class Dashboard {
         this.recentCheckupsElem = document.getElementById('recentCheckups');
         this.healthOverview = document.getElementById('healthOverview');
         this.healthInsights = document.getElementById('healthInsights');
-
         // Initialize current date display
         this.updateCurrentDate();
     }
@@ -41,9 +40,12 @@ class Dashboard {
     async initializeDashboard() {
         this.healthRecords = new HealthRecords();
         await this.healthRecords.loadRecordsFromStorage();
-
-        // Update the Health Overview section after loading records
-        this.updateHealthOverview();
+        try {
+            // Update the Health Overview section after loading records
+            this.updateHealthOverview();
+        } catch (error) {
+            console.error('Error initializing dashboard:', error);
+        }
     }
 
     updateHealthMetrics() {
@@ -187,6 +189,31 @@ class Dashboard {
                 ${insightsHTML}
             </div>
         `;
+    }
+
+    updateHealthInsights() {
+        const insightsContainer = document.getElementById('healthInsights');
+        if (!insightsContainer) {
+            console.error('Health insights container not found');
+            return;
+        }
+
+        const insights = window.healthRecords.generateHealthInsights();
+
+        if (insights.length === 0) {
+            insightsContainer.innerHTML = '<p class="no-data-message">No health insights available</p>';
+            return;
+        }
+
+        const insightsHTML = insights.map(insight => `
+            <div class="insight-card ${insight.type}">
+                <h4>${insight.title}</h4>
+                <p>${insight.description}</p>
+                <p class="recommendation">${insight.recommendation}</p>
+            </div>
+        `).join('');
+
+        insightsContainer.innerHTML = `<div class="insights-list">${insightsHTML}</div>`;
     }
 
     updateRecentRecords() {
@@ -347,41 +374,10 @@ class Dashboard {
         return insights;
     }
 
-    updateHealthInsights() {
-        const records = this.healthRecords?.records || [];
-        const insightsContainer = document.getElementById('healthInsights');
-
-        if (!insightsContainer) {
-            console.error('Health insights container not found');
-            return;
-        }
-
-        if (records.length === 0) {
-            insightsContainer.innerHTML = '<p class="no-data-message">No health records available for analysis</p>';
-            return;
-        }
-
-        const insights = this.generateHealthInsights(records);
-
-        const insightsHTML = insights.map(insight => `
-            <div class="insight-card ${insight.type}">
-                <div class="insight-icon"><i class="fas ${insight.icon}"></i></div>
-                <div class="insight-content">
-                    <h4>${insight.title}</h4>
-                    <p>${insight.description}</p>
-                    <p class="recommendation">${insight.recommendation}</p>
-                </div>
-            </div>
-        `).join('');
-
-        insightsContainer.innerHTML = `<div class="insights-overview-list">${insightsHTML}</div>`;
-    }
-
     calculateWeightTrend(records) {
         const sortedRecords = [...records].sort((a, b) => new Date(a.date) - new Date(b.date));
         const firstRecord = sortedRecords[0];
         const lastRecord = sortedRecords[sortedRecords.length - 1];
-
         const days = Math.ceil((new Date(lastRecord.date) - new Date(firstRecord.date)) / (1000 * 60 * 60 * 24));
         const change = parseFloat(lastRecord.weight) - parseFloat(firstRecord.weight);
 
@@ -435,7 +431,6 @@ class Dashboard {
         `;
     }
 
-    // Initialize dashboard
     async init(user) {
         if (!user) return;
 
@@ -459,7 +454,6 @@ class Dashboard {
         }, 60000); // Update every minute
     }
 
-    // Generate sample health records for demo
     generateSampleRecords() {
         const today = new Date();
         const records = [];
@@ -468,7 +462,6 @@ class Dashboard {
         for (let i = 0; i < 10; i++) {
             const recordDate = new Date();
             recordDate.setDate(today.getDate() - (i * 6)); // Every 6 days
-
             records.push({
                 date: recordDate.toISOString().split('T')[0],
                 recordType: i % 2 === 0 ? 'routine' : 'monthly',
@@ -484,7 +477,6 @@ class Dashboard {
         return records;
     }
 
-    // Update user info display
     updateUserInfo() {
         if (!this.userDisplayName) {
             console.error('User display name element not found');
@@ -493,280 +485,17 @@ class Dashboard {
 
         // Get the logged-in user from auth service
         const loggedInUser = window.auth ? window.auth.getCurrentUser() : null;
-
         const displayName = this.user && this.user.username ? this.user.username : 'Guest User';
         console.log('Setting display name to:', displayName);
         this.userDisplayName.textContent = displayName;
     }
 
-    // Update current date display
     updateCurrentDate() {
         if (!this.currentDateElem) return;
 
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         this.currentDateElem.textContent = now.toLocaleDateString('en-US', options);
-    }
-
-    // Update health stats
-    updateHealthStats() {
-        if (!this.user) return;
-
-        // Get health records
-        const healthRecords = this.user.healthRecords || [];
-
-        // Sort by date (newest first)
-        const sortedRecords = [...healthRecords].sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-        });
-
-        // Get latest record
-        const latestRecord = sortedRecords[0];
-
-        // Update stats if record exists
-        if (latestRecord) {
-            if (this.heartRateElem && latestRecord.heartRate !== '-') {
-                this.heartRateElem.textContent = latestRecord.heartRate;
-            }
-
-            if (this.weightElem && latestRecord.weight !== '-') {
-                this.weightElem.textContent = latestRecord.weight;
-            }
-
-            if (this.temperatureElem && latestRecord.temperature !== '-') {
-                this.temperatureElem.textContent = latestRecord.temperature;
-            }
-
-            if (this.bloodPressureElem && latestRecord.bloodPressure !== '-') {
-                this.bloodPressureElem.textContent = latestRecord.bloodPressure;
-            }
-        }
-    }
-
-    // Create health overview chart
-    createHealthChart() {
-        const chartCanvas = document.getElementById('healthChart');
-        if (!chartCanvas) return;
-
-        // Get health records
-        const healthRecords = this.user.healthRecords || [];
-
-        // Sort by date (oldest first for chart)
-        const sortedRecords = [...healthRecords].sort((a, b) => {
-            return new Date(a.date) - new Date(b.date);
-        });
-
-        // Get last 7 records or all if less than 7
-        const recentRecords = sortedRecords.slice(-7);
-
-        // Prepare data for chart
-        const labels = recentRecords.map(record => {
-            const date = new Date(record.date);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        });
-
-        const heartRateData = recentRecords.map(record => {
-            return record.heartRate !== '-' ? parseFloat(record.heartRate) : null;
-        });
-
-        const weightData = recentRecords.map(record => {
-            return record.weight !== '-' ? parseFloat(record.weight) : null;
-        });
-
-        const temperatureData = recentRecords.map(record => {
-            return record.temperature !== '-' ? parseFloat(record.temperature) : null;
-        });
-
-        // Create chart if we have data
-        if (labels.length > 0) {
-            // Destroy previous chart if exists
-            if (this.healthChart) {
-                this.healthChart.destroy();
-            }
-
-            const ctx = chartCanvas.getContext('2d');
-            this.healthChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Heart Rate (BPM)',
-                            data: heartRateData,
-                            borderColor: 'rgb(255, 99, 132)',
-                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                            yAxisID: 'y',
-                            tension: 0.2,
-                            fill: true
-                        },
-                        {
-                            label: 'Weight (kg)',
-                            data: weightData,
-                            borderColor: 'rgb(54, 162, 235)',
-                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                            yAxisID: 'y1',
-                            tension: 0.2,
-                            fill: true
-                        },
-                        {
-                            label: 'Temperature (°F)',
-                            data: temperatureData,
-                            borderColor: 'rgb(255, 159, 64)',
-                            backgroundColor: 'rgba(255, 159, 64, 0.1)',
-                            yAxisID: 'y2',
-                            tension: 0.2,
-                            fill: true,
-                            hidden: true // Hide by default to avoid cluttering
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        tooltip: {
-                            enabled: true
-                        },
-                        legend: {
-                            position: 'top',
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        },
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'BPM'
-                            },
-                            min: Math.min(...heartRateData.filter(val => val !== null)) * 0.8 || 40,
-                            max: Math.max(...heartRateData.filter(val => val !== null)) * 1.2 || 120
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'kg'
-                            },
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                            min: Math.min(...weightData.filter(val => val !== null)) * 0.8 || 40,
-                            max: Math.max(...weightData.filter(val => val !== null)) * 1.2 || 100
-                        },
-                        y2: {
-                            type: 'linear',
-                            display: false, // Hide by default
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: '°F'
-                            },
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                            min: 95,
-                            max: 105
-                        }
-                    }
-                }
-            });
-        } else {
-            // If no data, show empty state
-            const chartContainer = chartCanvas.parentNode;
-            chartContainer.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-chart-line"></i>
-                    <p>No health data available to display chart. Add health records to see your progress.</p>
-                </div>
-            `;
-        }
-    }
-
-    // Update disease predictions
-    async updateDiseasePredictions() {
-        const predictionsContainer = document.getElementById('disease-predictions');
-        if (!predictionsContainer) return;
-
-        // Get recent health records with symptoms
-        const records = this.healthRecords.records || [];
-        const recentRecords = records.slice(-5).reverse(); // Get last 5 records, newest first
-        const recordsWithSymptoms = recentRecords.filter(record => record.symptoms && record.symptoms.length > 0);
-
-        if (recordsWithSymptoms.length === 0) {
-            predictionsContainer.innerHTML = `
-                <div class="prediction-card">
-                    <h3>Disease Predictions</h3>
-                    <p class="empty-state">No recent symptoms recorded for prediction.</p>
-                </div>
-            `;
-            return;
-        }
-
-        try {
-            // Get symptoms from the most recent record
-            const latestRecord = recordsWithSymptoms[0];
-            const symptoms = Array.isArray(latestRecord.symptoms) ? latestRecord.symptoms : [latestRecord.symptoms];
-
-            // Make prediction using data service
-            const prediction = await this.dataService.predictDisease(symptoms);
-
-            // Create prediction HTML
-            const predictionHTML = `
-                <div class="prediction-card">
-                    <h3>Disease Predictions</h3>
-                    <div class="prediction-content">
-                        <div class="prediction-header">
-                            <h4>${prediction.disease}</h4>
-                            <span class="confidence">${(prediction.confidence * 100).toFixed(1)}% confidence</span>
-                        </div>
-                        <div class="prediction-details">
-                            <p class="description">${prediction.description}</p>
-                            <div class="recommendations">
-                                <h5>Precautions:</h5>
-                                <ul>
-                                    ${prediction.precautions.map(precaution => `<li>${precaution}</li>`).join('')}
-                                </ul>
-                                <h5>Diet Recommendations:</h5>
-                                <ul>
-                                    ${prediction.dietRecommendations.map(food => `<li>${food}</li>`).join('')}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            predictionsContainer.innerHTML = predictionHTML;
-        } catch (error) {
-            console.error('Error making disease prediction:', error);
-            predictionsContainer.innerHTML = `
-                <div class="prediction-card">
-                    <h3>Disease Predictions</h3>
-                    <p class="error-message">Unable to generate prediction at this time. Please try again later.</p>
-                </div>
-            `;
-        }
-    }
-}
-
-// Make updateDashboardStats available globally for other modules
-function updateDashboardStats() {
-    if (window.dashboard && auth.isLoggedIn) {
-        window.dashboard.updateHealthStats();
-        window.dashboard.createHealthChart();
     }
 }
 
